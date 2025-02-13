@@ -1,80 +1,47 @@
 
-grid = []
-line = []
-for i in range(3) :
-    for j in range(3) :
-        line.append(" ")
-        grid.append(line)
-        line = []
+from flask import Flask, jsonify, request
 
+app = Flask(__name__)
 
+# Spielfeld erstellen
+grid = [[" " for _ in range(3)] for _ in range(3)]
+turn_player1 = True
+player1_symbol = "X"
+player2_symbol = "O"
 
-#grid printing
-def print_grid() :
-    for i in range(3) :
-        print("|", end = "")
-    for j in range(3) :
-        print(grid[i][j], "|", end = "")
+# Spielfeld zurückgeben
+@app.route('/get_grid', methods=['GET'])
+def get_grid():
+    return jsonify(grid)
 
-        print("")
+# Spielerzug ausführen
+@app.route('/make_move', methods=['POST'])
+def make_move():
+    global turn_player1
+    data = request.json
+    cell = data["cell"] - 1
+    i, j = cell // 3, cell % 3
 
-
-#player turn
-def player_turn(turn_player1):
-    if turn_player1 == True:
-        turn_player1 = False
-        print(f"{player2} ist an der Reihe")
+    if grid[i][j] == " ":
+        grid[i][j] = player1_symbol if turn_player1 else player2_symbol
+        turn_player1 = not turn_player1
+        winner = check_winner()
+        return jsonify({"grid": grid, "winner": winner})
     else:
-        turn_player1 = True
-        print(f"{player1} ist an der Reihe")
-    return turn_player1
+        return jsonify({"error": "Zelle bereits belegt!"})
 
+# Gewinnüberprüfung
+def check_winner():
+    for i in range(3):
+        if grid[i][0] == grid[i][1] == grid[i][2] != " ":
+            return grid[i][0]
+        if grid[0][i] == grid[1][i] == grid[2][i] != " ":
+            return grid[0][i]
+    if grid[0][0] == grid[1][1] == grid[2][2] != " ":
+        return grid[0][0]
+    if grid[0][2] == grid[1][1] == grid[2][0] != " ":
+        return grid[0][2]
+    return None
 
-#choosing cell
-def free_cell(cell):
-    cell-= 1
-    i = int(cell / 3)
-    j = cell % 3
-    if turn_player1 == True :
-        grid[i] [j] = player1_symbol
-    else:
-         grid[i] [j] = player2_symbol
-    return
-grid
-
-
-#checking cell
-def free_cell(cell):
-    cell-= 1
-    i = int(cell / 3)
-    j = cell % 3
-    if grid  [i] [j] == player1_symbol or player2_symbol :
-        print("zelle bereits belegt")
-        return False
-    return False
-
-
-#Game opening
-print("willkommen bei TicaTacToe")
-print("")
-print_grid()
-print("")
-player1 = input("Bitte Namen von Player1 eingeben : ")
-player1_symbol = input("Bitte Symbol für Player 1 Angeben : ")
-player2 = input("Bitte Namen von Player2 eingeben : ")
-player2_symbol = input("Bitte Symbol für Player2 Angeben : ")
-Game = True
-full_grid = False
-turn_player1 = False
-winner = ""
-
-
-#win check
-def win check(grid, player1_symbol, player2_symbol):
-full grid = True
-player1_symbol_count=0
-player2_symbol_count=0
-#checking rows
-for i in range(3):
-    for j in range (3):
-        if grid [i][j]
+if __name__ == '__main__':
+    app.run(debug=True)
