@@ -30,7 +30,7 @@ main {
 }
 
 footer {
-    background-color: #ff00;
+    background-color: #ff0000; /* Korrekt */
     color: #fff;
     padding: 10px 0;
     text-align: center;
