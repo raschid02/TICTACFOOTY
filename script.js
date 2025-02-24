@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function makeMove(cell) {
-        fetch("http://127.0.0.1:5000/make_move", {
+        fetch("/make_move", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ cell: cell })
@@ -46,7 +46,23 @@ document.addEventListener("DOMContentLoaded", function() {
         });
     }
 
-    fetch("http://127.0.0.1:5000/get_grid")
+    document.addEventListener("DOMContentLoaded", function() {
+        const restartButton = document.getElementById("restart-btn");
+    
+        // Spielfeld zurücksetzen
+        restartButton.addEventListener("click", function() {
+            fetch("/restart", { method: "POST" })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.message);
+                    updateGrid(data.grid);
+                })
+                .catch(error => console.error("Fehler beim Neustarten:", error));
+        });
+    });
+    
+
+    fetch("/get_grid")
         .then(function(response) { return response.json(); })
         .then(function(data) {
             updateGrid(data);
