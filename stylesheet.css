@@ -2,35 +2,33 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #696969;
-}
-
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 0;
+    background-color: #5b47f3;
     text-align: center;
 }
 
-nav {
-    background-color: #444;
-    color: #fff;
-    padding: 10px;
+#grid {
+    display: inline-block;
+    margin-top: 20px;
+}
+
+.row {
+    display: flex;
+    justify-content: center;
+}
+
+.cell {
+    width: 80px;
+    height: 80px;
+    font-size: 24px;
     text-align: center;
-}
-
-nav a {
-    color: #fff;
-    margin: 0 10px;
-    text-decoration: none;
-}
-
-main {
-    padding: 20px;
+    border: 2px solid black;
+    background-color: white;
+    cursor: pointer;
+    margin: 2px;
 }
 
 footer {
-    background-color: #ff0000; /* Korrekt */
+    background-color: #a8ffff;
     color: #fff;
     padding: 10px 0;
     text-align: center;
